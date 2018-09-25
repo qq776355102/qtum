@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/mvc     
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/jdbc 
+	http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee-4.0.xsd 
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://cxf.apache.org/jaxws 
+	http://cxf.apache.org/schemas/jaxws.xsd
+	http://www.springframework.org/schema/util 
+	http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
+	default-lazy-init="false">
+
+	<context:annotation-config />
+
+
+	<context:component-scan base-package="com.yunlian.cmc,cn.cmc">
+<!-- 		<context:exclude-filter expression="org.springframework.stereotype.Controller"
+			type="annotation" />
+		<context:exclude-filter
+			expression="org.springframework.web.bind.annotation.ControllerAdvice"
+			type="annotation" />
+		<context:exclude-filter
+			expression="org.springframework.web.bind.annotation.RestController"
+			type="annotation" /> -->
+	</context:component-scan>
+
+
+	<!-- proxy-target-class="true"使用cglib代理;无法通知Final方法，因为他们不能被覆写;另外还需要将CGLIB二进制包放入classpath下面 -->
+	<aop:aspectj-autoproxy expose-proxy="true" />
+
+	<context:property-placeholder
+		location="classpath*:jdbc.properties,classpath*:qtum.properties" />
+
+	<import resource="classpath*:applicationContext-*.xml" />
+	<bean id="dataSource" class="com.yunlian.cmc.dna.multidatesource.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<!-- 指定lookupKey和与之对应的数据源 -->
+				<entry key="QTUM" value-ref="qtumDataSource"></entry>
+			</map>
+		</property>
+		<!-- 这里可以指定默认的数据源 -->
+		<property name="defaultTargetDataSource" ref="qtumDataSource" />
+	</bean>
+
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:/mybatis-config.xml" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.yunlian.cmc.**.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<!-- 单数据源事物管理 -->
+	<!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+		<property name="dataSource" ref="dataSource" /> </bean> -->
+
+	<!-- 使用annotation定义事务 -->
+	<!-- 如果 “proxy-target-class” 属值被设置为 “true”，那么基于类的代理将起作用（这时需要CGLIB库cglib.jar在CLASSPATH中） 
+		属值被设置为 “false” 或者这个属性被省略，那么标准的JDK基于接口的代理将起作用。 -->
+	<tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager"
+		order="1" />
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- <bean id="jedisPoolProxy" class="cn.cmc.cache.JedisPoolProxy" init-method="initialPool"/> 
+		<bean id="redisObjectCache" class="cn.cmc.cache.impl.RedisObjectCacheImpl" 
+		/> -->
+	<!-- <bean id="sysConfig" class="com.yunlian.dna.core.SysProperties"> <property 
+		name="locations"> <list> <value>classpath*:/sys.properties</value> </list> 
+		</property> </bean> -->
+
+	<!-- <task:annotation-driven executor="exceptionHandlingTaskExecutor" scheduler="defaultTaskScheduler"/> 
+		<bean id="exceptionHandlingTaskExecutor" class="cn.cmc.TaskExecutor.ExceptionHandlingAsyncTaskExecutor"> 
+		<constructor-arg ref="defaultTaskExecutor" /> </bean> <task:executor id="defaultTaskExecutor" 
+		pool-size="5" /> <task:scheduler id="defaultTaskScheduler" pool-size="10" 
+		/> -->
+
+	<task:annotation-driven executor="executor"
+		scheduler="scheduler" />
+	<!-- S 配置定时任务 -->
+	<task:executor id="executor" pool-size="5" />
+	<!-- 配置线程池 -->
+	<task:scheduler id="scheduler" pool-size="10" />
+
+</beans>

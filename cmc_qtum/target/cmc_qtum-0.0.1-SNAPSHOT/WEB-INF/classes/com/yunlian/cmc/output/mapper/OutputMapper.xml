@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunlian.cmc.output.mapper.OutputMapper" >
+  <resultMap id="BaseResultMap" type="com.yunlian.cmc.output.model.po.Output" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="txid" property="txid" jdbcType="VARCHAR" />
+    <result column="vout" property="vout" jdbcType="TINYINT" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="scriptPubKey" property="scriptpubkey" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="confirmations" property="confirmations" jdbcType="INTEGER" />
+    <result column="spendable" property="spendable" jdbcType="BIT" />
+    <result column="solvable" property="solvable" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, txid, vout, address, account, scriptPubKey, amount, confirmations, spendable, 
+    solvable
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from output
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySelective" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	  select 
+    <include refid="Base_Column_List" />
+    from output
+    <where>
+    	<if test="txid != null and txid != ''">
+    		and txid = #{txid}
+    	</if>
+    	<if test="vout != null">
+    		and vout = #{vout}
+    	</if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from output
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yunlian.cmc.output.model.po.Output" >
+    insert into output (id, txid, vout, 
+      address, account, scriptPubKey, 
+      amount, confirmations, spendable, 
+      solvable)
+    values (#{id,jdbcType=INTEGER}, #{txid,jdbcType=VARCHAR}, #{vout,jdbcType=TINYINT}, 
+      #{address,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{scriptpubkey,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{confirmations,jdbcType=INTEGER}, #{spendable,jdbcType=BIT}, 
+      #{solvable,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yunlian.cmc.output.model.po.Output" >
+    insert into output
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="txid != null" >
+        txid,
+      </if>
+      <if test="vout != null" >
+        vout,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="scriptpubkey != null" >
+        scriptPubKey,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="confirmations != null" >
+        confirmations,
+      </if>
+      <if test="spendable != null" >
+        spendable,
+      </if>
+      <if test="solvable != null" >
+        solvable,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="txid != null" >
+        #{txid,jdbcType=VARCHAR},
+      </if>
+      <if test="vout != null" >
+        #{vout,jdbcType=TINYINT},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptpubkey != null" >
+        #{scriptpubkey,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="confirmations != null" >
+        #{confirmations,jdbcType=INTEGER},
+      </if>
+      <if test="spendable != null" >
+        #{spendable,jdbcType=BIT},
+      </if>
+      <if test="solvable != null" >
+        #{solvable,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch" parameterType="com.yunlian.cmc.output.model.po.Output">
+  	 insert into output (id, txid, vout, 
+      address, account, scriptPubKey, 
+      amount, confirmations, spendable, 
+      solvable)
+    values 
+    <foreach collection="outputs" item="output"  separator=",">
+    	(#{output.txid},#{output.vout},#{output.address},#{output.account},#{output.scriptPubKey},#{output.amount},#{output.confirmations},#{output.spendable},#{output.solvable})
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunlian.cmc.output.model.po.Output" >
+    update output
+    <set >
+      <if test="txid != null" >
+        txid = #{txid,jdbcType=VARCHAR},
+      </if>
+      <if test="vout != null" >
+        vout = #{vout,jdbcType=TINYINT},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="scriptpubkey != null" >
+        scriptPubKey = #{scriptpubkey,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="confirmations != null" >
+        confirmations = #{confirmations,jdbcType=INTEGER},
+      </if>
+      <if test="spendable != null" >
+        spendable = #{spendable,jdbcType=BIT},
+      </if>
+      <if test="solvable != null" >
+        solvable = #{solvable,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunlian.cmc.output.model.po.Output" >
+    update output
+    set txid = #{txid,jdbcType=VARCHAR},
+      vout = #{vout,jdbcType=TINYINT},
+      address = #{address,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      scriptPubKey = #{scriptpubkey,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      confirmations = #{confirmations,jdbcType=INTEGER},
+      spendable = #{spendable,jdbcType=BIT},
+      solvable = #{solvable,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunlian.cmc.transaction.mapper.QtumTransactionMapper">
+	<resultMap id="BaseResultMap"
+		type="com.yunlian.cmc.transaction.model.po.QtumTransaction">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="guid" property="guid" jdbcType="VARCHAR" />
+		<result column="hash" property="hash" jdbcType="VARCHAR" />
+		<result column="fromadd" property="fromadd" jdbcType="VARCHAR" />
+		<result column="toadd" property="toadd" jdbcType="VARCHAR" />
+		<result column="gas" property="gas" jdbcType="DECIMAL" />
+		<result column="gasprice" property="gasprice" jdbcType="DECIMAL" />
+		<result column="gasused" property="gasused" jdbcType="DECIMAL" />
+		<result column="value" property="value" jdbcType="DECIMAL" />
+		<result column="minerfee" property="minerfee" jdbcType="DECIMAL" />
+		<result column="blocknumber" property="blocknumber" jdbcType="INTEGER" />
+		<result column="blockhash" property="blockhash" jdbcType="VARCHAR" />
+		<result column="contractadd" property="contractadd" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, guid, hash, fromadd, toadd, gas, gasprice, gasused, value, minerfee,
+		blocknumber,
+		blockhash, contractadd, time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from qtumtransaction
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="selectBySelective" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from qtumtransaction
+		<where>
+			<if test="guid != null">
+				and guid = #{guid,jdbcType=VARCHAR}
+			</if>
+			<if test="hash != null">
+				and hash = #{hash,jdbcType=VARCHAR}
+			</if>
+			<if test="fromadd != null">
+				and fromadd = #{fromadd,jdbcType=VARCHAR}
+			</if>
+			<if test="toadd != null">
+				and toadd = #{toadd,jdbcType=VARCHAR}
+			</if>
+			<if test="gas != null">
+				and gas = #{gas,jdbcType=DECIMAL}
+			</if>
+			<if test="gasprice != null">
+				and gasprice = #{gasprice,jdbcType=DECIMAL}
+			</if>
+			<if test="gasused != null">
+				and gasused = #{gasused,jdbcType=DECIMAL}
+			</if>
+			<if test="value != null">
+				and value = #{value,jdbcType=DECIMAL}
+			</if>
+			<if test="minerfee != null">
+				and minerfee = #{minerfee,jdbcType=DECIMAL}
+			</if>
+			<if test="blocknumber != null">
+				and blocknumber = #{blocknumber,jdbcType=INTEGER}
+			</if>
+			<if test="blockhash != null">
+				and blockhash = #{blockhash,jdbcType=VARCHAR}
+			</if>
+			<if test="contractadd != null">
+				and contractadd = #{contractadd,jdbcType=VARCHAR}
+			</if>
+			<if test="time != null">
+				and time = #{time,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from qtumtransaction
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.yunlian.cmc.transaction.model.po.QtumTransaction">
+		insert into qtumtransaction (id, guid, hash,
+		fromadd, toadd, gas,
+		gasprice, gasused, value,
+		minerfee, blocknumber, blockhash,
+		contractadd, time)
+		values (#{id,jdbcType=INTEGER}, #{guid,jdbcType=VARCHAR},
+		#{hash,jdbcType=VARCHAR},
+		#{fromadd,jdbcType=VARCHAR}, #{toadd,jdbcType=VARCHAR}, #{gas,jdbcType=DECIMAL},
+		#{gasprice,jdbcType=DECIMAL}, #{gasused,jdbcType=DECIMAL},
+		#{value,jdbcType=DECIMAL},
+		#{minerfee,jdbcType=DECIMAL}, #{blocknumber,jdbcType=INTEGER}, #{blockhash,jdbcType=VARCHAR},
+		#{contractadd,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.yunlian.cmc.transaction.model.po.QtumTransaction"
+		keyProperty="id" useGeneratedKeys="true" keyColumn="id">
+		insert into qtumtransaction
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="guid != null">
+				guid,
+			</if>
+			<if test="hash != null">
+				hash,
+			</if>
+			<if test="fromadd != null">
+				fromadd,
+			</if>
+			<if test="toadd != null">
+				toadd,
+			</if>
+			<if test="gas != null">
+				gas,
+			</if>
+			<if test="gasprice != null">
+				gasprice,
+			</if>
+			<if test="gasused != null">
+				gasused,
+			</if>
+			<if test="value != null">
+				value,
+			</if>
+			<if test="minerfee != null">
+				minerfee,
+			</if>
+			<if test="blocknumber != null">
+				blocknumber,
+			</if>
+			<if test="blockhash != null">
+				blockhash,
+			</if>
+			<if test="contractadd != null">
+				contractadd,
+			</if>
+			<if test="time != null">
+				time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="guid != null">
+				#{guid,jdbcType=VARCHAR},
+			</if>
+			<if test="hash != null">
+				#{hash,jdbcType=VARCHAR},
+			</if>
+			<if test="fromadd != null">
+				#{fromadd,jdbcType=VARCHAR},
+			</if>
+			<if test="toadd != null">
+				#{toadd,jdbcType=VARCHAR},
+			</if>
+			<if test="gas != null">
+				#{gas,jdbcType=DECIMAL},
+			</if>
+			<if test="gasprice != null">
+				#{gasprice,jdbcType=DECIMAL},
+			</if>
+			<if test="gasused != null">
+				#{gasused,jdbcType=DECIMAL},
+			</if>
+			<if test="value != null">
+				#{value,jdbcType=DECIMAL},
+			</if>
+			<if test="minerfee != null">
+				#{minerfee,jdbcType=DECIMAL},
+			</if>
+			<if test="blocknumber != null">
+				#{blocknumber,jdbcType=INTEGER},
+			</if>
+			<if test="blockhash != null">
+				#{blockhash,jdbcType=VARCHAR},
+			</if>
+			<if test="contractadd != null">
+				#{contractadd,jdbcType=VARCHAR},
+			</if>
+			<if test="time != null">
+				#{time,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.yunlian.cmc.transaction.model.po.QtumTransaction">
+		update qtumtransaction
+		<set>
+			<if test="guid != null">
+				guid = #{guid,jdbcType=VARCHAR},
+			</if>
+			<if test="hash != null">
+				hash = #{hash,jdbcType=VARCHAR},
+			</if>
+			<if test="fromadd != null">
+				fromadd = #{fromadd,jdbcType=VARCHAR},
+			</if>
+			<if test="toadd != null">
+				toadd = #{toadd,jdbcType=VARCHAR},
+			</if>
+			<if test="gas != null">
+				gas = #{gas,jdbcType=DECIMAL},
+			</if>
+			<if test="gasprice != null">
+				gasprice = #{gasprice,jdbcType=DECIMAL},
+			</if>
+			<if test="gasused != null">
+				gasused = #{gasused,jdbcType=DECIMAL},
+			</if>
+			<if test="value != null">
+				value = #{value,jdbcType=DECIMAL},
+			</if>
+			<if test="minerfee != null">
+				minerfee = #{minerfee,jdbcType=DECIMAL},
+			</if>
+			<if test="blocknumber != null">
+				blocknumber = #{blocknumber,jdbcType=INTEGER},
+			</if>
+			<if test="blockhash != null">
+				blockhash = #{blockhash,jdbcType=VARCHAR},
+			</if>
+			<if test="contractadd != null">
+				contractadd = #{contractadd,jdbcType=VARCHAR},
+			</if>
+			<if test="time != null">
+				time = #{time,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.yunlian.cmc.transaction.model.po.QtumTransaction">
+		update qtumtransaction
+		set guid = #{guid,jdbcType=VARCHAR},
+		hash = #{hash,jdbcType=VARCHAR},
+		fromadd = #{fromadd,jdbcType=VARCHAR},
+		toadd = #{toadd,jdbcType=VARCHAR},
+		gas = #{gas,jdbcType=DECIMAL},
+		gasprice = #{gasprice,jdbcType=DECIMAL},
+		gasused = #{gasused,jdbcType=DECIMAL},
+		value = #{value,jdbcType=DECIMAL},
+		minerfee = #{minerfee,jdbcType=DECIMAL},
+		blocknumber = #{blocknumber,jdbcType=INTEGER},
+		blockhash = #{blockhash,jdbcType=VARCHAR},
+		contractadd = #{contractadd,jdbcType=VARCHAR},
+		time = #{time,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
